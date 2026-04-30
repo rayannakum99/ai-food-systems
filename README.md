@@ -29,14 +29,17 @@ calories and shopping list.
 Google Form → Make.com → Anthropic Claude → Gmail
 
 ### Status
-- Prompt: working ✓
-- Automation: working ✓
-- HTML email output: working ✓
-- Token limit: set to 4000 ✓
-- End to end test: in progress
+- Prompt: working
+- Automation: working
+- HTML email output: working 
+- Token limit: set to 5000 
+- End to end test: complete
 
 ### Output sample
 - 7 day meal plan
 - Per meal: cost, calories, protein, carbs, fat
 - Shopping list with supermarket prices
 - Personalised intro and sign off
+
+### Try it
+bit.ly/rayeats-mealplanner

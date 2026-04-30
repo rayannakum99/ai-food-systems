@@ -17,9 +17,7 @@ Claude, Make.com, Google Forms, Google Sheets, Vercel
 ## Follow the build
 LinkedIn: https://www.linkedin.com/in/rayan-nakum-2a639a245/
 
-## System 1 — Budget Meal Planner
-
-## System 1 — Budget Meal Planner
+## System 1 - Budget Meal Planner
 
 ### The prompt (v2)
 Personalised meal plan generator — inputs name, budget, 

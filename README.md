@@ -19,19 +19,26 @@ LinkedIn: https://www.linkedin.com/in/rayan-nakum-2a639a245/
 
 ## System 1 — Budget Meal Planner
 
-### The prompt (v1)
-"I have £30 for 7 days. I'm one person. Give me a full meal plan 
-(breakfast, lunch, dinner), cost per meal, and a shopping list with 
-estimated UK supermarket prices. Meals should be quick to make, 
-filling, tasty and high protein. I work shifts so I need things that are easy to prep."
+## System 1 — Budget Meal Planner
 
-### Output
-- 7 day meal plan, £29.20 total, 80p under budget
-- ~92g protein per day
-- Shopping list categorised by section
-- Status: prompt working ✓ | automation: not yet
+### The prompt (v2)
+Personalised meal plan generator — inputs name, budget, 
+days, dietary requirements, nearest supermarket.
+Outputs full HTML meal plan with costs, nutrition, 
+calories and shopping list.
 
-- Automation: Google Forms → Make.com → 
-  Claude → Gmail ✓
-- HTML email output working ✓
-- Status: testing and refining
+### How it works
+Google Form → Make.com → Anthropic Claude → Gmail
+
+### Status
+- Prompt: working ✓
+- Automation: working ✓
+- HTML email output: working ✓
+- Token limit: set to 4000 ✓
+- End to end test: in progress
+
+### Output sample
+- 7 day meal plan
+- Per meal: cost, calories, protein, carbs, fat
+- Shopping list with supermarket prices
+- Personalised intro and sign off

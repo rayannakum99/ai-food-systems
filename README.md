@@ -30,3 +30,8 @@ filling, tasty and high protein. I work shifts so I need things that are easy to
 - ~92g protein per day
 - Shopping list categorised by section
 - Status: prompt working ✓ | automation: not yet
+
+- Automation: Google Forms → Make.com → 
+  Claude → Gmail ✓
+- HTML email output working ✓
+- Status: testing and refining

@@ -1,6 +1,6 @@
-# AI Food Systems — 30 Day Build
+# AI Food Systems - 30 Day Build
 
-Built by Rayan Nakum — Economics graduate, Commis Chef, AI builder.
+Built by Rayan Nakum, Economics graduate, Commis Chef, AI builder.
 
 ## The problem
 Eating well on a tight budget is hard. I lived it. So I built the tools I wish I had.

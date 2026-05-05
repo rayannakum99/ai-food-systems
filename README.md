@@ -15,7 +15,7 @@ Eating well on a tight budget is hard. I lived it. So I built the tools I wish I
 Claude, Make.com, Google Forms, Google Sheets, Vercel
 
 ## Follow the build
-LinkedIn: https://www.linkedin.com/in/rayan-nakum-2a639a245/
+Portfolio: rayannakum.co.uk
 
 ## System 1 - Budget Meal Planner
 

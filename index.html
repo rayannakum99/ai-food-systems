@@ -1,90 +1,445 @@
+<!-- Copyright 2026 Rayan Nakum. rayannakum.co.uk. All rights reserved. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fridge to Recipe</title>
-  <link rel="stylesheet" href="/fridge-to-recipe/style.css" />
+  <title>Rayan Nakum | AI Systems Builder and Economics Graduate</title>
+  <meta name="description" content="Rayan Nakum is an Economics graduate and Chef building AI food automation systems in public. Solving real budget eating problems with Claude, Make.com and Google tools." />
+  <meta name="keywords" content="Rayan Nakum, AI systems, budget meal planner, AI automation, Economics graduate, Chef, Make.com, Claude AI" />
+  <meta name="author" content="Rayan Nakum" />
+  <link rel="canonical" href="https://rayannakum.co.uk" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rayannakum.co.uk" />
+  <meta property="og:title" content="Rayan Nakum | AI Systems Builder" />
+  <meta property="og:description" content="Economics graduate and Chef building AI food automation systems in public. 4 systems. 30 days. All free tools." />
+  <meta property="og:image" content="https://rayannakum.co.uk/og-image.png" />
+  <meta property="og:site_name" content="Rayan Nakum" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rayan Nakum | AI Systems Builder" />
+  <meta name="twitter:description" content="Economics graduate and Chef building AI food automation systems in public. 4 systems. 30 days. All free tools." />
+  <meta name="twitter:image" content="https://rayannakum.co.uk/og-image.png" />
+  <meta name="robots" content="index, follow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --bg2: #111111; --bg3: #161616;
+      --border: #222222; --green: #4ade80;
+      --text: #f0f0f0; --muted: #888888;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--green); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: #0a0a0a; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 8px; text-decoration: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+    .btn-primary:hover { background: #86efac; transform: translateY(-1px); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-weight: 500; font-size: 15px; padding: 14px 28px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s; }
+    .btn-secondary:hover { border-color: var(--green); color: var(--green); }
+    .section-label { font-size: 12px; font-weight: 600; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .section-sub { color: var(--muted); font-size: 17px; line-height: 1.7; margin-bottom: 60px; font-weight: 300; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s ease forwards; }
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.2s; }
+    .fade-in:nth-child(3) { animation-delay: 0.3s; }
+    .fade-in:nth-child(4) { animation-delay: 0.4s; }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center; padding: 120px 48px 80px; position: relative; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; bottom: -200px; left: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(74,222,128,0.05) 0%, transparent 70%); pointer-events: none; }
+    .hero-left { display: flex; flex-direction: column; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); color: var(--green); font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 100px; margin-bottom: 32px; width: fit-content; letter-spacing: 0.04em; }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(40px, 5.5vw, 72px); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero-sub { font-size: 17px; color: var(--muted); line-height: 1.7; margin-bottom: 40px; font-weight: 300; max-width: 480px; }
+    .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .stats-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 40px; position: relative; overflow: hidden; }
+    .stats-card::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%); }
+    .stats-card-label { font-size: 12px; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 32px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--green); letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 13px; color: var(--muted); }
+    .stats-divider { height: 1px; background: var(--border); margin: 28px 0; }
+    .stats-note { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .stats-note strong { color: var(--text); font-weight: 500; }
+
+    /* ABOUT */
+    .about-section { padding: 100px 48px; border-top: 1px solid var(--border); }
+    .about-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 60px; }
+    .about-header .section-sub { margin-bottom: 0; }
+    .about-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .about-col { background: var(--bg2); padding: 40px 32px; transition: background 0.2s; }
+    .about-col:hover { background: var(--bg3); }
+    .about-col-icon { font-size: 32px; margin-bottom: 20px; display: block; }
+    .about-col h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+    .about-col p { color: var(--muted); font-size: 14px; line-height: 1.7; font-weight: 300; }
+    .about-col p strong { color: var(--text); font-weight: 500; }
+
+    /* SYSTEMS TIMELINE */
+    .systems-section { padding: 100px 48px; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .systems-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 80px; }
+    .systems-header .section-sub { margin-bottom: 0; }
+    .timeline { position: relative; max-width: 900px; }
+    .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+    .timeline-item { display: grid; grid-template-columns: 60px 1fr; gap: 32px; position: relative; }
+    .timeline-item:not(:last-child) { padding-bottom: 48px; }
+    .timeline-dot { width: 40px; height: 40px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; position: relative; z-index: 1; }
+    .timeline-dot.live { background: rgba(74,222,128,0.1); border-color: var(--green); color: var(--green); }
+    .timeline-dot.building { background: rgba(251,191,36,0.1); border-color: #fbbf24; color: #fbbf24; }
+    .timeline-content { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.2s; }
+    .timeline-content:hover { border-color: rgba(74,222,128,0.3); }
+    .timeline-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
+    .timeline-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+    .system-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; }
+    .status-live { background: rgba(74,222,128,0.1); color: var(--green); }
+    .status-live .status-dot { background: var(--green); animation: pulse 2s infinite; }
+    .status-building { background: rgba(251,191,36,0.1); color: #fbbf24; }
+    .status-building .status-dot { background: #fbbf24; }
+    .status-planned { background: rgba(136,136,136,0.1); color: var(--muted); }
+    .status-planned .status-dot { background: var(--muted); }
+    .timeline-desc { color: var(--muted); font-size: 15px; line-height: 1.6; font-weight: 300; margin-bottom: 20px; }
+    .timeline-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .flow-step { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--muted); }
+    .flow-arrow { color: var(--green); font-size: 14px; }
+    .timeline-link { display: inline-flex; align-items: center; gap: 6px; color: var(--green); font-size: 13px; font-weight: 500; text-decoration: none; margin-top: 16px; transition: gap 0.2s; }
+    .timeline-link:hover { gap: 10px; }
+
+    /* PROCESS */
+    .process-section { padding: 100px 48px; border-top: 1px solid var(--border); }
+    .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .process-step { background: var(--bg2); padding: 40px 32px; transition: background 0.2s; }
+    .process-step:hover { background: var(--bg3); }
+    .process-step-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: rgba(74,222,128,0.5); letter-spacing: -0.04em; line-height: 1; margin-bottom: 20px; }
+    .process-step h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .process-step p { color: var(--muted); font-size: 14px; line-height: 1.6; font-weight: 300; }
+
+    /* STACK */
+    .stack-section { padding: 100px 48px; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stack-categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .stack-cat { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .stack-cat-label { font-size: 11px; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+    .stack-items { display: flex; flex-direction: column; gap: 8px; }
+    .stack-item { font-size: 14px; color: var(--muted); font-weight: 400; padding: 8px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+    .stack-item:last-child { border-bottom: none; }
+    .stack-item:hover { color: var(--text); }
+
+    /* CONNECT */
+    .connect-section { padding: 100px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .connect-left .section-sub { margin-bottom: 0; }
+    .connect-right { display: flex; flex-direction: column; gap: 16px; }
+    .connect-link { display: flex; align-items: center; justify-content: space-between; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; text-decoration: none; color: var(--text); transition: all 0.2s; }
+    .connect-link:hover { border-color: var(--green); background: var(--bg3); }
+    .connect-link-left { display: flex; flex-direction: column; gap: 4px; }
+    .connect-link-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+    .connect-link-sub { font-size: 13px; color: var(--muted); }
+    .connect-link-arrow { color: var(--green); font-size: 18px; transition: transform 0.2s; }
+    .connect-link:hover .connect-link-arrow { transform: translateX(4px); }
+    .connect-link.primary { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.3); }
+    .connect-link.primary .connect-link-title { color: var(--green); }
+
+    /* FOOTER */
+    footer { padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
+    .footer-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--muted); }
+    .footer-note { font-size: 13px; color: var(--muted); }
+    .footer-note a { color: var(--green); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+      .hero-right { display: none; }
+      .about-section, .systems-section, .process-section, .stack-section { padding: 60px 24px; }
+      .about-header, .systems-header { grid-template-columns: 1fr; gap: 20px; }
+      .about-row { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .stack-categories { grid-template-columns: 1fr 1fr; }
+      .connect-section { grid-template-columns: 1fr; padding: 60px 24px; gap: 40px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 24px; }
+    }
+    @media (max-width: 600px) {
+      .process-steps { grid-template-columns: 1fr; }
+      .stack-categories { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">fridge<span>→</span>recipe</div>
-  </header>
+  <nav>
+    <a href="#" class="nav-logo">RN</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#systems">Systems</a></li>
+      <li><a href="#process">How I work</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </nav>
 
-  <main>
-
-    <!-- Step 1: Upload -->
-    <section class="card" id="upload-section">
-      <p class="step-label">STEP 1</p>
-      <h2>Photo of your fridge</h2>
-      <p class="sub">Take or upload a clear photo — the more visible the better.</p>
-
-      <div class="drop-zone" id="drop-zone">
-        <input type="file" id="file-input" accept="image/*" hidden />
-        <input type="file" id="camera-input" accept="image/*" capture="environment" hidden />
-        <div class="drop-inner" id="drop-inner">
-          <div class="drop-icon">📷</div>
-          <p>Drag & drop a photo here</p>
-          <p class="or">or</p>
-          <div class="upload-btns">
-            <button class="btn-outline" onclick="document.getElementById('file-input').click()">Choose file</button>
-            <button class="btn-outline" onclick="document.getElementById('camera-input').click()">Take photo</button>
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag fade-in">30-day AI build, in public</div>
+      <h1 class="fade-in">I build <em>AI systems</em> that solve real problems.</h1>
+      <p class="hero-sub fade-in">Economics graduate. Chef. I have spent years working with data and working in kitchens. Both taught me to think in systems. Now I am building AI tools to solve a problem I actually lived.</p>
+      <div class="hero-cta fade-in">
+        <a href="#systems" class="btn-primary">See my systems</a>
+        <a href="https://www.linkedin.com/in/rayan-nakum-2a639a245/" target="_blank" class="btn-secondary">Connect on LinkedIn</a>
+      </div>
+    </div>
+    <div class="hero-right fade-in">
+      <div class="stats-card">
+        <div class="stats-card-label">Build progress</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Days into the build</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1/4</div>
+            <div class="stat-label">Systems built</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">6h</div>
+            <div class="stat-label">Hours invested</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">£15.17</div>
+            <div class="stat-label">Spent on tools</div>
           </div>
         </div>
-        <img id="preview" src="" alt="Fridge preview" hidden />
+        <div class="stats-divider"></div>
+        <p class="stats-note">Building <strong>4 AI food systems</strong> in 30 days using Claude, Make.com and Google tools. All documented publicly.</p>
       </div>
-
-      <button class="btn-clear" id="clear-btn" hidden onclick="clearImage()">Remove photo</button>
-    </section>
-
-    <!-- Step 2: Dietary restrictions -->
-    <section class="card" id="diet-section">
-      <p class="step-label">STEP 2</p>
-      <h2>Any dietary restrictions?</h2>
-      <p class="sub">Leave blank if none.</p>
-      <input
-        type="text"
-        id="diet-input"
-        placeholder="e.g. vegetarian, no nuts, gluten-free, dairy-free"
-      />
-    </section>
-
-    <!-- Analyse button -->
-    <button class="btn-primary" id="analyse-btn" disabled onclick="analyse()">
-      Analyse My Fridge
-    </button>
-
-    <!-- Loading state -->
-    <div class="loading" id="loading" hidden>
-      <div class="spinner"></div>
-      <p>Claude is scanning your fridge...</p>
     </div>
+  </section>
 
-    <!-- Results -->
-    <section id="results" hidden>
-
-      <div class="results-header">
-        <h2>What Claude found</h2>
-        <button class="btn-outline small" onclick="reset()">Start over</button>
+  <section class="about-section" id="about">
+    <div class="about-header">
+      <div>
+        <div class="section-label">About</div>
+        <h2 class="section-title">The background behind the build.</h2>
       </div>
-
-      <div class="ingredients-box">
-        <p class="section-label">INGREDIENTS SPOTTED</p>
-        <div id="ingredients-list" class="tags"></div>
+      <p class="section-sub">Two things most AI builders do not have. Real kitchen experience and an Economics degree. I am using both.</p>
+    </div>
+    <div class="about-row">
+      <div class="about-col">
+        <span class="about-col-icon">🎯</span>
+        <h3>The problem I am solving</h3>
+        <p>Eating well on a tight budget is genuinely hard. As a recent graduate working kitchen shifts, I know exactly what it feels like to open the fridge at the end of the week with barely anything left and no idea what to cook. I am building AI systems to solve that, for me and for everyone in the same position.</p>
       </div>
+      <div class="about-col">
+        <span class="about-col-icon">🎓</span>
+        <h3>Economics graduate</h3>
+        <p><strong>BSc Economics, University of Leicester (2:1).</strong> Modules in Econometrics, Applied Econometrics, Business Data Science and International Finance. I have built time series models to forecast GDP trends, run R-based simulations testing autocorrelation effects, and presented data-driven recommendations to stakeholders in a business consulting competition.</p>
+      </div>
+      <div class="about-col">
+        <span class="about-col-icon">👨‍🍳</span>
+        <h3>Chef</h3>
+        <p><strong>Currently working at The Cricketer's Arms.</strong> I lead services, control stock, reduce waste and train new team members in a fast-paced kitchen. Kitchens run on systems and I have been building and following them under pressure every shift. Peel everything first, then chop. Prep in batches. Every step has an order designed to remove wasted effort. That instinct carries directly into how I build AI automation.</p>
+      </div>
+    </div>
+  </section>
 
-      <p class="section-label" style="margin-top: 2.5rem;">RECIPES FOR YOU</p>
-      <div id="recipes-list" class="recipes"></div>
+  <section class="systems-section" id="systems">
+    <div class="systems-header">
+      <div>
+        <div class="section-label">Systems</div>
+        <h2 class="section-title">Four systems. Thirty days.</h2>
+      </div>
+      <p class="section-sub">Each one built to solve a real part of the budget eating problem. All free tools. All documented publicly.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot live">01</div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <span class="timeline-title">Budget Meal Planner</span>
+            <span class="system-status status-live"><span class="status-dot"></span> Live</span>
+          </div>
+          <p class="timeline-desc">Input your budget, days, dietary requirements and nearest supermarket. Get a full personalised meal plan with costs, calories, protein and cooking instructions, emailed to you automatically.</p>
+          <div class="timeline-flow">
+            <span class="flow-step">Google Form</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Make.com</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Claude AI</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Gmail</span>
+          </div>
+          <a href="https://bit.ly/rayeats-mealplanner" target="_blank" class="timeline-link">Try it now →</a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot building">02</div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <span class="timeline-title">Fridge to Recipe</span>
+            <span class="system-status status-building"><span class="status-dot"></span> Building now</span>
+          </div>
+          <p class="timeline-desc">Upload a photo of your fridge. AI identifies what you have and generates recipes using only those ingredients. No food waste. No unnecessary shopping.</p>
+          <div class="timeline-flow">
+            <span class="flow-step">Photo upload</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Claude Vision</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Recipe output</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">03</div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <span class="timeline-title">Nutrition and Cost Tracker</span>
+            <span class="system-status status-planned"><span class="status-dot"></span> Coming soon</span>
+          </div>
+          <p class="timeline-desc">Log every meal automatically. Track calories, protein, carbs and cost per meal over time. All data flows into Google Sheets with no manual entry required.</p>
+          <div class="timeline-flow">
+            <span class="flow-step">Google Form</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Make.com</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Google Sheets</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">04</div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <span class="timeline-title">Budget Forecast Model</span>
+            <span class="system-status status-planned"><span class="status-dot"></span> Coming soon</span>
+          </div>
+          <p class="timeline-desc">An Economics-led cost per serving model built in R. Models real food costs across common meals, budget ranges and supermarkets. This is where the degree earns its place.</p>
+          <div class="timeline-flow">
+            <span class="flow-step">R model</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Cost data</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Forecast output</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    </section>
+  <section class="process-section" id="process">
+    <div class="section-label">How I work</div>
+    <h2 class="section-title" style="margin-bottom: 12px;">Build fast. Document everything. Showcase my work.</h2>
+    <p class="section-sub">Learn the tools, solve a real problem, post what I build.</p>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-step-num">01</div>
+        <h3>Find a real problem</h3>
+        <p>Something I actually lived and want to solve. Budget eating as a student, and now as a graduate working shifts was that problem.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">02</div>
+        <h3>Build a working system fast</h3>
+        <p>A working thing that actually does something useful. System 1 went from idea to working email automation in two days.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">03</div>
+        <h3>Document it publicly</h3>
+        <p>Every system, every hour, every mistake goes on LinkedIn and GitHub. The build log is the portfolio. The work speaks for itself.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">04</div>
+        <h3>Bring in the Economics brain</h3>
+        <p>Data analysis, cost modelling and structured thinking are things most AI builders skip. I am bringing them in from day one, especially in System 4 where I model real food costs in R.</p>
+      </div>
+    </div>
+  </section>
 
-  </main>
+  <section class="stack-section">
+    <div class="section-label">Stack</div>
+    <h2 class="section-title" style="margin-bottom: 12px;">All free. All learnt on the job.</h2>
+    <p class="section-sub">No prior experience with most of these. Just figuring it out and building anyway.</p>
+    <div class="stack-categories">
+      <div class="stack-cat">
+        <div class="stack-cat-label">AI</div>
+        <div class="stack-items">
+          <div class="stack-item">Claude AI</div>
+          <div class="stack-item">Claude Vision</div>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-label">Automation</div>
+        <div class="stack-items">
+          <div class="stack-item">Make.com</div>
+          <div class="stack-item">Google Forms</div>
+          <div class="stack-item">Gmail API</div>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-label">Data</div>
+        <div class="stack-items">
+          <div class="stack-item">Google Sheets</div>
+          <div class="stack-item">R</div>
+          <div class="stack-item">Excel</div>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <div class="stack-cat-label">Build and deploy</div>
+        <div class="stack-items">
+          <div class="stack-item">GitHub</div>
+          <div class="stack-item">Vercel</div>
+          <div class="stack-item">HTML / CSS</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="connect-section" id="connect">
+    <div class="connect-left">
+      <div class="section-label">Connect</div>
+      <h2 class="section-title">Follow the build.</h2>
+      <p class="section-sub">I am posting every system, every mistake and everything I learn publicly on LinkedIn. Come follow along.</p>
+    </div>
+    <div class="connect-right">
+      <a href="https://www.linkedin.com/in/rayan-nakum-2a639a245/" target="_blank" class="connect-link primary">
+        <div class="connect-link-left">
+          <span class="connect-link-title">Follow on LinkedIn</span>
+          <span class="connect-link-sub">Weekly build updates and system breakdowns</span>
+        </div>
+        <span class="connect-link-arrow">→</span>
+      </a>
+      <a href="https://bit.ly/rayeats-mealplanner" target="_blank" class="connect-link">
+        <div class="connect-link-left">
+          <span class="connect-link-title">Try System 1</span>
+          <span class="connect-link-sub">Get a free personalised meal plan</span>
+        </div>
+        <span class="connect-link-arrow">→</span>
+      </a>
+      <a href="https://github.com/rayannakum99/ai-food-systems" target="_blank" class="connect-link">
+        <div class="connect-link-left">
+          <span class="connect-link-title">View on GitHub</span>
+          <span class="connect-link-sub">See the code and build log</span>
+        </div>
+        <span class="connect-link-arrow">→</span>
+      </a>
+      <a href="mailto:rayan.nakum99@gmail.com" class="connect-link">
+        <div class="connect-link-left">
+          <span class="connect-link-title">Email me</span>
+          <span class="connect-link-sub" onclick="navigator.clipboard.writeText('rayan.nakum99@gmail.com'); this.textContent='Copied!'; setTimeout(()=>this.textContent='rayan.nakum99@gmail.com',2000)" style="cursor:pointer;" title="Click to copy">rayan.nakum99@gmail.com</span>
+        </div>
+        <span class="connect-link-arrow">→</span>
+      </a>
+    </div>
+  </section>
 
   <footer>
-    <p>Powered by Claude Vision &nbsp;·&nbsp; Built by <a href="https://www.rayannakum.co.uk" target="_blank">Rayan</a></p>
+    <span class="footer-name">Rayan Nakum</span>
+    <span class="footer-note">Built with AI systems · 30-day public build · <a href="mailto:rayan.nakum99@gmail.com">Get in touch</a></span>
   </footer>
 
-  <script src="/fridge-to-recipe/script.js"></script>
 </body>
 </html>

@@ -8,30 +8,34 @@
 </head>
 <body>
 
+  <div class="noise"></div>
+  <div class="glow"></div>
+
   <header>
-    <div class="logo">fridge<span>→</span>recipe</div>
+    <div class="logo">FRIDGE<span>→</span>RECIPE</div>
     <a href="/" class="back-link">← Back to rayannakum.co.uk</a>
   </header>
 
-  <div class="notice">
-    <span class="notice-icon">ℹ</span>
-    <div><strong>Heads up:</strong> Recipes are AI-generated and may not always be accurate, so please use your own judgement. Make sure your fridge items are clearly visible in the photo for the best results. Always follow normal food safety and cooking guidelines.</div>
-  </div>
-
   <main>
+
+    <!-- Notice -->
+    <div class="card notice-card">
+      <p class="notice-label">BEFORE YOU START</p>
+      <p class="notice-body">Recipes are AI-generated and may not always be accurate. Please use your own judgement. Make sure your fridge items are clearly visible in the photo for the best results. Always follow normal food safety and cooking guidelines.</p>
+    </div>
 
     <!-- Step 1: Upload -->
     <section class="card" id="upload-section">
       <p class="step-label">STEP 1</p>
       <h2>Photo of your fridge</h2>
-      <p class="sub">Take or upload a clear photo — the more visible the better.</p>
+      <p class="sub">Take or upload a clear photo. The more visible the better.</p>
 
       <div class="drop-zone" id="drop-zone">
         <input type="file" id="file-input" accept="image/*" hidden />
         <input type="file" id="camera-input" accept="image/*" capture="environment" hidden />
         <div class="drop-inner" id="drop-inner">
           <div class="drop-icon">📷</div>
-          <p>Drag & drop a photo here</p>
+          <p>Drag and drop a photo here</p>
           <p class="or">or</p>
           <div class="upload-btns">
             <button class="btn-outline" onclick="document.getElementById('file-input').click()">Choose file</button>

@@ -32,10 +32,10 @@
             <button class="btn-outline" onclick="document.getElementById('camera-input').click()">Take photo</button>
           </div>
         </div>
-        <img id="preview" alt="" hidden />
+        <img id="preview" alt="" style="display:none" />
       </div>
 
-      <button class="btn-clear" id="clear-btn" hidden onclick="clearImage()">Remove photo</button>
+      <button class="btn-clear" id="clear-btn" style="display:none" onclick="clearImage()">Remove photo</button>
     </section>
 
     <!-- Step 2: Dietary restrictions -->
@@ -56,13 +56,13 @@
     </button>
 
     <!-- Loading state -->
-    <div class="loading" id="loading" hidden>
+    <div class="loading" id="loading" style="display:none">
       <div class="spinner"></div>
       <p>Claude is scanning your fridge...</p>
     </div>
 
     <!-- Results -->
-    <section id="results" hidden>
+    <section id="results" style="display:none">
 
       <div class="results-header">
         <h2>What Claude found</h2>

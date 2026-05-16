@@ -10,6 +10,10 @@ const results    = document.getElementById('results');
 let imageBase64  = null;
 let imageMime    = 'image/jpeg';
 
+// ensure hidden on load
+loading.style.display  = 'none';
+results.style.display  = 'none';
+
 // ── Drag & drop ──────────────────────────────────────────
 dropZone.addEventListener('dragover', e => {
   e.preventDefault();
@@ -46,10 +50,10 @@ function loadImage(file) {
     const dataUrl = e.target.result;
     imageBase64 = dataUrl.split(',')[1];
     preview.src = dataUrl;
-    preview.hidden = false;
-    dropInner.hidden = true;
+    preview.style.display = 'block';
+    dropInner.style.display = 'none';
     dropZone.classList.add('has-image');
-    clearBtn.hidden = false;
+    clearBtn.style.display = 'inline-block';
     analyseBtn.disabled = false;
   };
   reader.readAsDataURL(file);
@@ -58,10 +62,10 @@ function loadImage(file) {
 function clearImage() {
   imageBase64 = null;
   preview.src = '';
-  preview.hidden = true;
-  dropInner.hidden = false;
+  preview.style.display = 'none';
+  dropInner.style.display = 'flex';
   dropZone.classList.remove('has-image');
-  clearBtn.hidden = true;
+  clearBtn.style.display = 'none';
   analyseBtn.disabled = true;
   fileInput.value = '';
 }
@@ -71,8 +75,8 @@ async function analyse() {
   const diet = document.getElementById('diet-input').value.trim();
 
   analyseBtn.disabled = true;
-  loading.hidden = false;
-  results.hidden = true;
+  loading.style.display = 'flex';
+  results.style.display = 'none';
 
   try {
     const res = await fetch('/api/fridge-analyze', {
@@ -91,20 +95,18 @@ async function analyse() {
   } catch (err) {
     alert('Something went wrong: ' + err.message);
   } finally {
-    loading.hidden = true;
+    loading.style.display = 'none';
     analyseBtn.disabled = false;
   }
 }
 
 // ── Render ───────────────────────────────────────────────
 function renderResults(data) {
-  // Ingredients
   const ingList = document.getElementById('ingredients-list');
   ingList.innerHTML = data.ingredients
     .map(i => `<span class="tag">${i}</span>`)
     .join('');
 
-  // Recipes
   const recList = document.getElementById('recipes-list');
   recList.innerHTML = data.recipes.map((r, idx) => `
     <div class="recipe-card" id="recipe-${idx}">
@@ -138,7 +140,7 @@ function renderResults(data) {
     </div>
   `).join('');
 
-  results.hidden = false;
+  results.style.display = 'block';
   results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -148,7 +150,7 @@ function toggleRecipe(idx) {
 
 function reset() {
   clearImage();
-  results.hidden = true;
+  results.style.display = 'none';
   document.getElementById('diet-input').value = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/fridge-analyze.js": {
-      "maxDuration": 30
-    }
-  }
-}

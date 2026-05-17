@@ -493,8 +493,26 @@ Return ONLY this JSON, nothing else:
       showStep('step-loading');
       animateLoadingSteps();
 
-      try {
-        const raw = await callClaude(`Please score this recipe:\n\n${recipe}`, SYSTEM_PROMPT);
+     try {
+  let recipeContent = recipe;
+
+  if (recipe.startsWith('http://') || recipe.startsWith('https://')) {
+    try {
+      const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(recipe);
+      const response = await fetch(proxyUrl);
+      const data = await response.json();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data.contents, 'text/html');
+      doc.querySelectorAll('script, style, nav, footer, header, aside').forEach(el => el.remove());
+      recipeContent = doc.body.innerText.slice(0, 4000);
+    } catch {
+      alert('Could not fetch that URL. Please paste the recipe text directly instead.');
+      showStep('step-input');
+      return;
+    }
+  }
+
+  const raw = await callClaude(`Please score this recipe:\n\n${recipeContent}`, SYSTEM_PROMPT);
         const data = parseJSON(raw);
         if (!data) throw new Error('Parse failed');
         renderResults(data);

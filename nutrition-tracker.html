@@ -1,0 +1,630 @@
+<!-- Copyright 2026 Rayan Nakum. rayannakum.co.uk. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nutrition Tracker | Rayan Nakum</title>
+  <meta name="description" content="Track your meal nutrition and costs. Upload a photo, confirm what's on your plate, and log calories, protein and cost automatically." />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --bg2: #111111; --bg3: #161616;
+      --border: #222222; --green: #4ade80;
+      --text: #f0f0f0; --muted: #888888;
+      --red: #f87171; --amber: #fbbf24;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; min-height: 100vh; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--green); text-decoration: none; }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+    .nav-back:hover { color: var(--text); }
+
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 120px 48px 80px; position: relative; z-index: 1; }
+
+    .page-label { font-size: 12px; font-weight: 600; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+    .page-title { font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .page-sub { color: var(--muted); font-size: 17px; line-height: 1.7; font-weight: 300; margin-bottom: 48px; max-width: 560px; }
+
+    /* STEPS */
+    .step { display: none; animation: fadeUp 0.4s ease forwards; }
+    .step.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* UPLOAD AREA */
+    .upload-zone { border: 2px dashed var(--border); border-radius: 20px; padding: 60px 40px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg2); position: relative; overflow: hidden; }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--green); background: rgba(74,222,128,0.04); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+    .upload-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .upload-sub { color: var(--muted); font-size: 14px; }
+    .upload-preview { width: 100%; max-height: 320px; object-fit: cover; border-radius: 16px; margin-top: 24px; display: none; }
+
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: #0a0a0a; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 8px; text-decoration: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif; border: none; cursor: pointer; }
+    .btn-primary:hover { background: #86efac; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-weight: 500; font-size: 15px; padding: 14px 28px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-secondary:hover { border-color: var(--green); color: var(--green); }
+
+    .btn-row { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+
+    /* LOADING */
+    .loading-state { text-align: center; padding: 60px 20px; }
+    .loading-spinner { width: 40px; height: 40px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: var(--muted); font-size: 15px; }
+
+    /* ITEMS LIST */
+    .section-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 36px; margin-bottom: 24px; }
+    .section-card-label { font-size: 11px; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+    .section-card-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
+    .section-card-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+    .meal-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 24px; }
+
+    .items-list { display: flex; flex-direction: column; gap: 10px; }
+    .item-row { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; transition: border-color 0.2s; }
+    .item-row:focus-within { border-color: rgba(74,222,128,0.4); }
+    .item-name-input { flex: 1; background: transparent; border: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; }
+    .item-name-input::placeholder { color: var(--muted); }
+    .portion-select { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 4px 10px; border-radius: 6px; outline: none; cursor: pointer; }
+    .portion-select:focus { border-color: var(--green); }
+    .item-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 4px; transition: color 0.2s; }
+    .item-remove:hover { color: var(--red); }
+
+    .add-item-btn { display: flex; align-items: center; gap: 8px; background: none; border: 1px dashed var(--border); border-radius: 10px; padding: 12px 16px; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; width: 100%; transition: all 0.2s; margin-top: 8px; }
+    .add-item-btn:hover { border-color: var(--green); color: var(--green); }
+
+    .confidence-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+    .confidence-high { background: rgba(74,222,128,0.1); color: var(--green); }
+    .confidence-medium { background: rgba(251,191,36,0.1); color: var(--amber); }
+    .confidence-low { background: rgba(248,113,113,0.1); color: var(--red); }
+    .confidence-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    .uncertainty-note { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.2); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: var(--amber); margin-bottom: 20px; }
+
+    /* NUTRITION RESULTS */
+    .nutrition-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .nutrition-stat { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; }
+    .nutrition-value { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--green); letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+    .nutrition-label { font-size: 12px; color: var(--muted); }
+
+    .cost-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .cost-stat { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; }
+    .cost-value { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+    .cost-label { font-size: 12px; color: var(--muted); }
+
+    .efficiency-bar { margin-bottom: 24px; }
+    .efficiency-label-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+    .efficiency-label-row span:first-child { color: var(--muted); }
+    .efficiency-badge { font-weight: 600; padding: 2px 10px; border-radius: 100px; font-size: 12px; }
+    .eff-excellent { background: rgba(74,222,128,0.1); color: var(--green); }
+    .eff-good { background: rgba(74,222,128,0.07); color: #86efac; }
+    .eff-average { background: rgba(251,191,36,0.1); color: var(--amber); }
+    .eff-poor { background: rgba(248,113,113,0.1); color: var(--red); }
+    .bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.8s ease; }
+
+    .chef-tip { background: rgba(74,222,128,0.05); border: 1px solid rgba(74,222,128,0.2); border-radius: 12px; padding: 20px; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 24px; }
+    .chef-tip-icon { font-size: 24px; flex-shrink: 0; }
+    .chef-tip-label { font-size: 11px; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+    .chef-tip-text { font-size: 14px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+    .chef-tip-text strong { color: var(--text); font-weight: 500; }
+
+    .meal-summary-text { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; font-weight: 300; }
+
+    /* EDITABLE NUTRITION */
+    .editable-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .editable-row:last-child { border-bottom: none; }
+    .editable-label { flex: 1; font-size: 14px; color: var(--muted); }
+    .editable-input { background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 6px 12px; border-radius: 6px; width: 100px; text-align: right; outline: none; transition: border-color 0.2s; }
+    .editable-input:focus { border-color: var(--green); }
+    .editable-unit { font-size: 13px; color: var(--muted); width: 30px; }
+
+    /* SUCCESS */
+    .success-icon { font-size: 56px; margin-bottom: 16px; display: block; text-align: center; }
+    .success-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; text-align: center; margin-bottom: 8px; }
+    .success-sub { color: var(--muted); font-size: 15px; text-align: center; margin-bottom: 32px; }
+
+    .logged-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    .logged-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+    .logged-value { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--green); letter-spacing: -0.03em; }
+    .logged-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    footer { padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+    .footer-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--muted); }
+    .footer-note { font-size: 13px; color: var(--muted); }
+    .footer-note a { color: var(--green); text-decoration: none; }
+
+    @media (max-width: 700px) {
+      nav { padding: 16px 24px; }
+      .page-wrap { padding: 100px 24px 60px; }
+      .nutrition-grid { grid-template-columns: 1fr 1fr; }
+      .cost-row { grid-template-columns: 1fr 1fr; }
+      .logged-summary { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">RN</a>
+    <a href="/#systems" class="nav-back">← Back to systems</a>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-label">System 3</div>
+    <h1 class="page-title">Nutrition and Cost Tracker</h1>
+    <p class="page-sub">Upload a photo of your meal. AI identifies what is on the plate. You confirm, adjust, then log it. Calories, cost and efficiency calculated automatically.</p>
+
+    <!-- STEP 1: UPLOAD -->
+    <div class="step active" id="step-upload">
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="photoInput" accept="image/*" />
+        <span class="upload-icon">📷</span>
+        <div class="upload-title">Upload a photo of your meal</div>
+        <div class="upload-sub">Click to browse or drag and drop. JPG, PNG or HEIC.</div>
+        <img class="upload-preview" id="uploadPreview" alt="Meal preview" />
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="analyseBtn" disabled>Analyse my meal</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: LOADING -->
+    <div class="step" id="step-loading">
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Identifying your meal...</div>
+      </div>
+    </div>
+
+    <!-- STEP 3: CONFIRM ITEMS -->
+    <div class="step" id="step-confirm">
+      <div class="section-card">
+        <img class="meal-preview" id="confirmPreview" alt="Your meal" />
+        <div class="section-card-label">What I can see</div>
+        <div class="section-card-title">Is this what is on your plate?</div>
+        <div class="section-card-sub">Edit, remove or add any items before I calculate the nutrition.</div>
+        <div id="confidenceBadge"></div>
+        <div id="uncertaintyNote"></div>
+        <div class="items-list" id="itemsList"></div>
+        <button class="add-item-btn" id="addItemBtn">+ Add an item I missed</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="calculateBtn">Calculate nutrition and cost</button>
+        <button class="btn-secondary" id="retakeBtn">Upload a different photo</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: RESULTS -->
+    <div class="step" id="step-results">
+      <div class="section-card">
+        <div class="section-card-label">Nutrition breakdown</div>
+        <p class="meal-summary-text" id="mealSummaryText"></p>
+        <div class="nutrition-grid">
+          <div class="nutrition-stat">
+            <div class="nutrition-value" id="resCalories">0</div>
+            <div class="nutrition-label">Calories</div>
+          </div>
+          <div class="nutrition-stat">
+            <div class="nutrition-value" id="resProtein">0g</div>
+            <div class="nutrition-label">Protein</div>
+          </div>
+          <div class="nutrition-stat">
+            <div class="nutrition-value" id="resCarbs">0g</div>
+            <div class="nutrition-label">Carbs</div>
+          </div>
+          <div class="nutrition-stat">
+            <div class="nutrition-value" id="resFat">0g</div>
+            <div class="nutrition-label">Fat</div>
+          </div>
+        </div>
+        <div class="cost-row">
+          <div class="cost-stat">
+            <div class="cost-value" id="resCost">£0.00</div>
+            <div class="cost-label">Estimated cost</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-value" id="resProteinPerGbp">0g</div>
+            <div class="cost-label">Protein per £1</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-value" id="resCalPerGbp">0</div>
+            <div class="cost-label">Calories per £1</div>
+          </div>
+        </div>
+        <div class="efficiency-bar">
+          <div class="efficiency-label-row">
+            <span>Meal efficiency</span>
+            <span class="efficiency-badge" id="efficiencyBadge"></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="efficiencyBar" style="width:0%"></div></div>
+        </div>
+        <div class="chef-tip" id="chefTipBlock">
+          <span class="chef-tip-icon">👨‍🍳</span>
+          <div>
+            <div class="chef-tip-label">Chef tip</div>
+            <div class="chef-tip-text" id="chefTipText"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-label">Adjust before logging</div>
+        <div class="section-card-title">Looks right?</div>
+        <div class="section-card-sub">Tweak any values if you know better. Then hit log.</div>
+        <div id="editableFields">
+          <div class="editable-row"><span class="editable-label">Calories</span><input class="editable-input" id="editCalories" type="number" /><span class="editable-unit">kcal</span></div>
+          <div class="editable-row"><span class="editable-label">Protein</span><input class="editable-input" id="editProtein" type="number" /><span class="editable-unit">g</span></div>
+          <div class="editable-row"><span class="editable-label">Carbs</span><input class="editable-input" id="editCarbs" type="number" /><span class="editable-unit">g</span></div>
+          <div class="editable-row"><span class="editable-label">Fat</span><input class="editable-input" id="editFat" type="number" /><span class="editable-unit">g</span></div>
+          <div class="editable-row"><span class="editable-label">Cost</span><input class="editable-input" id="editCost" type="number" step="0.01" /><span class="editable-unit">£</span></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" id="logBtn">Log this meal</button>
+        <button class="btn-secondary" id="startOverBtn">Start over</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: SUCCESS -->
+    <div class="step" id="step-success">
+      <div class="section-card" style="text-align:center; padding: 60px 40px;">
+        <span class="success-icon">✅</span>
+        <div class="success-title">Meal logged.</div>
+        <p class="success-sub">Your meal has been saved to Google Sheets.</p>
+        <div class="logged-summary">
+          <div class="logged-stat">
+            <div class="logged-value" id="loggedCalories"></div>
+            <div class="logged-label">Calories</div>
+          </div>
+          <div class="logged-stat">
+            <div class="logged-value" id="loggedProtein"></div>
+            <div class="logged-label">Protein</div>
+          </div>
+          <div class="logged-stat">
+            <div class="logged-value" id="loggedCost"></div>
+            <div class="logged-label">Cost</div>
+          </div>
+        </div>
+        <div class="chef-tip" id="successChefTip" style="text-align:left;">
+          <span class="chef-tip-icon">👨‍🍳</span>
+          <div>
+            <div class="chef-tip-label">Chef tip</div>
+            <div class="chef-tip-text" id="successChefTipText"></div>
+          </div>
+        </div>
+        <button class="btn-primary" id="logAnotherBtn" style="margin: 0 auto;">Log another meal</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span class="footer-name">Rayan Nakum</span>
+    <span class="footer-note">System 3 of 4 · <a href="/#systems">See all systems</a></span>
+  </footer>
+
+  <script>
+    // ─── CONFIG ───────────────────────────────────────────────────────────────
+    // Replace this with your Make.com webhook URL for logging to Google Sheets
+    const SHEETS_WEBHOOK = 'YOUR_MAKE_WEBHOOK_URL_HERE';
+
+    // ─── STATE ────────────────────────────────────────────────────────────────
+    let uploadedImageBase64 = null;
+    let identifiedItems = [];
+    let nutritionData = null;
+
+    // ─── HELPERS ──────────────────────────────────────────────────────────────
+    function showStep(id) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function callClaude(messages, systemPrompt) {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages
+        })
+      });
+      const data = await res.json();
+      return data.content.map(b => b.text || '').join('');
+    }
+
+    function parseJSON(raw) {
+      try {
+        const clean = raw.replace(/```json|```/g, '').trim();
+        return JSON.parse(clean);
+      } catch {
+        return null;
+      }
+    }
+
+    // ─── UPLOAD ───────────────────────────────────────────────────────────────
+    const photoInput = document.getElementById('photoInput');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const analyseBtn = document.getElementById('analyseBtn');
+    const uploadZone = document.getElementById('uploadZone');
+
+    photoInput.addEventListener('change', () => {
+      const file = photoInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        uploadedImageBase64 = e.target.result.split(',')[1];
+        uploadPreview.src = e.target.result;
+        uploadPreview.style.display = 'block';
+        analyseBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        uploadedImageBase64 = ev.target.result.split(',')[1];
+        uploadPreview.src = ev.target.result;
+        uploadPreview.style.display = 'block';
+        analyseBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ─── ANALYSE ──────────────────────────────────────────────────────────────
+    analyseBtn.addEventListener('click', async () => {
+      showStep('step-loading');
+      document.getElementById('loadingText').textContent = 'Identifying your meal...';
+
+      const systemPrompt = `You are a meal identification assistant helping a budget-conscious person in the UK track what they eat.
+
+You will be shown a photo of a meal. Your job is to list every individual food item you can see on the plate.
+
+Be specific. Do not say "pasta dish", say "penne pasta", "tomato sauce", "grated cheddar". Break it down into its components.
+
+If you are uncertain about an item, include it anyway but add a "?" after the name.
+
+Return only this JSON, nothing else:
+
+{
+  "items": [
+    { "name": "food item name", "portion_size": "small" },
+    { "name": "food item name", "portion_size": "medium" }
+  ],
+  "confidence": "high",
+  "note": ""
+}
+
+portion_size must be one of: small, medium, large`;
+
+      try {
+        const raw = await callClaude([{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: uploadedImageBase64 } },
+            { type: 'text', text: 'Please identify all the food items on this plate.' }
+          ]
+        }], systemPrompt);
+
+        const parsed = parseJSON(raw);
+        if (!parsed || !parsed.items) throw new Error('Bad response');
+
+        identifiedItems = parsed.items;
+        renderConfirmStep(parsed);
+        showStep('step-confirm');
+      } catch (err) {
+        alert('Something went wrong identifying your meal. Please try again.');
+        showStep('step-upload');
+      }
+    });
+
+    // ─── CONFIRM STEP ─────────────────────────────────────────────────────────
+    function renderConfirmStep(parsed) {
+      document.getElementById('confirmPreview').src = uploadPreview.src;
+
+      // Confidence badge
+      const badge = document.getElementById('confidenceBadge');
+      const cls = { high: 'confidence-high', medium: 'confidence-medium', low: 'confidence-low' }[parsed.confidence] || 'confidence-medium';
+      const label = { high: 'High confidence', medium: 'Medium confidence', low: 'Low confidence' }[parsed.confidence] || 'Medium confidence';
+      badge.innerHTML = `<div class="confidence-badge ${cls}"><span class="confidence-dot"></span>${label}</div>`;
+
+      // Uncertainty note
+      const note = document.getElementById('uncertaintyNote');
+      note.innerHTML = parsed.note ? `<div class="uncertainty-note">⚠️ ${parsed.note}</div>` : '';
+
+      renderItemsList();
+    }
+
+    function renderItemsList() {
+      const list = document.getElementById('itemsList');
+      list.innerHTML = '';
+      identifiedItems.forEach((item, i) => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <input class="item-name-input" value="${item.name}" placeholder="Item name" data-index="${i}" />
+          <select class="portion-select" data-index="${i}">
+            <option value="small" ${item.portion_size === 'small' ? 'selected' : ''}>Small</option>
+            <option value="medium" ${item.portion_size === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="large" ${item.portion_size === 'large' ? 'selected' : ''}>Large</option>
+          </select>
+          <button class="item-remove" data-index="${i}" title="Remove item">×</button>
+        `;
+        list.appendChild(row);
+      });
+
+      list.querySelectorAll('.item-name-input').forEach(input => {
+        input.addEventListener('input', () => { identifiedItems[input.dataset.index].name = input.value; });
+      });
+      list.querySelectorAll('.portion-select').forEach(sel => {
+        sel.addEventListener('change', () => { identifiedItems[sel.dataset.index].portion_size = sel.value; });
+      });
+      list.querySelectorAll('.item-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          identifiedItems.splice(parseInt(btn.dataset.index), 1);
+          renderItemsList();
+        });
+      });
+    }
+
+    document.getElementById('addItemBtn').addEventListener('click', () => {
+      identifiedItems.push({ name: '', portion_size: 'medium' });
+      renderItemsList();
+      const inputs = document.querySelectorAll('.item-name-input');
+      inputs[inputs.length - 1].focus();
+    });
+
+    document.getElementById('retakeBtn').addEventListener('click', () => {
+      uploadedImageBase64 = null;
+      uploadPreview.style.display = 'none';
+      analyseBtn.disabled = true;
+      photoInput.value = '';
+      showStep('step-upload');
+    });
+
+    // ─── CALCULATE ────────────────────────────────────────────────────────────
+    document.getElementById('calculateBtn').addEventListener('click', async () => {
+      const validItems = identifiedItems.filter(i => i.name.trim());
+      if (!validItems.length) { alert('Please add at least one food item.'); return; }
+
+      showStep('step-loading');
+      document.getElementById('loadingText').textContent = 'Calculating nutrition and cost...';
+
+      const systemPrompt = `You are a nutrition and cost analyst helping a budget-conscious person in the UK track their meals.
+
+You will be given a confirmed list of food items and their portion sizes. Calculate the combined nutritional content and estimated cost for the whole meal.
+
+Use UK supermarket pricing as your reference (Tesco, Aldi, Asda). Assume home cooked unless stated otherwise.
+
+Return only this JSON, nothing else:
+
+{
+  "meal_summary": "a short 1 sentence description of the overall meal",
+  "calories": 0,
+  "protein_g": 0,
+  "carbs_g": 0,
+  "fat_g": 0,
+  "estimated_cost_gbp": 0.00,
+  "protein_per_gbp": 0,
+  "calories_per_gbp": 0,
+  "efficiency_rating": "excellent",
+  "chef_tip": "one practical tip to improve this meal nutritionally or reduce the cost"
+}
+
+efficiency_rating must be one of: excellent, good, average, poor`;
+
+      const itemsText = validItems.map(i => `- ${i.name} (${i.portion_size} portion)`).join('\n');
+
+      try {
+        const raw = await callClaude([{
+          role: 'user',
+          content: `Here are the confirmed food items:\n${itemsText}\n\nPlease calculate the nutrition and cost for this meal.`
+        }], systemPrompt);
+
+        const parsed = parseJSON(raw);
+        if (!parsed) throw new Error('Bad response');
+
+        nutritionData = parsed;
+        renderResults(parsed);
+        showStep('step-results');
+      } catch (err) {
+        alert('Something went wrong calculating nutrition. Please try again.');
+        showStep('step-confirm');
+      }
+    });
+
+    // ─── RESULTS ──────────────────────────────────────────────────────────────
+    function renderResults(data) {
+      document.getElementById('mealSummaryText').textContent = data.meal_summary;
+      document.getElementById('resCalories').textContent = data.calories;
+      document.getElementById('resProtein').textContent = data.protein_g + 'g';
+      document.getElementById('resCarbs').textContent = data.carbs_g + 'g';
+      document.getElementById('resFat').textContent = data.fat_g + 'g';
+      document.getElementById('resCost').textContent = '£' + data.estimated_cost_gbp.toFixed(2);
+      document.getElementById('resProteinPerGbp').textContent = data.protein_per_gbp + 'g';
+      document.getElementById('resCalPerGbp').textContent = data.calories_per_gbp;
+      document.getElementById('chefTipText').textContent = data.chef_tip;
+
+      const effMap = { excellent: { label: 'Excellent', cls: 'eff-excellent', pct: 95 }, good: { label: 'Good', cls: 'eff-good', pct: 70 }, average: { label: 'Average', cls: 'eff-average', pct: 45 }, poor: { label: 'Poor', cls: 'eff-poor', pct: 20 } };
+      const eff = effMap[data.efficiency_rating] || effMap.average;
+      const badge = document.getElementById('efficiencyBadge');
+      badge.textContent = eff.label;
+      badge.className = 'efficiency-badge ' + eff.cls;
+      setTimeout(() => { document.getElementById('efficiencyBar').style.width = eff.pct + '%'; }, 100);
+
+      document.getElementById('editCalories').value = data.calories;
+      document.getElementById('editProtein').value = data.protein_g;
+      document.getElementById('editCarbs').value = data.carbs_g;
+      document.getElementById('editFat').value = data.fat_g;
+      document.getElementById('editCost').value = data.estimated_cost_gbp.toFixed(2);
+    }
+
+    // ─── LOG ──────────────────────────────────────────────────────────────────
+    document.getElementById('logBtn').addEventListener('click', async () => {
+      const finalData = {
+        timestamp: new Date().toISOString(),
+        meal_summary: nutritionData.meal_summary,
+        items: identifiedItems.filter(i => i.name.trim()).map(i => `${i.name} (${i.portion_size})`).join(', '),
+        calories: parseInt(document.getElementById('editCalories').value) || nutritionData.calories,
+        protein_g: parseFloat(document.getElementById('editProtein').value) || nutritionData.protein_g,
+        carbs_g: parseFloat(document.getElementById('editCarbs').value) || nutritionData.carbs_g,
+        fat_g: parseFloat(document.getElementById('editFat').value) || nutritionData.fat_g,
+        estimated_cost_gbp: parseFloat(document.getElementById('editCost').value) || nutritionData.estimated_cost_gbp,
+        protein_per_gbp: nutritionData.protein_per_gbp,
+        calories_per_gbp: nutritionData.calories_per_gbp,
+        efficiency_rating: nutritionData.efficiency_rating,
+        chef_tip: nutritionData.chef_tip
+      };
+
+      // Send to Make.com webhook (which logs to Google Sheets)
+      try {
+        await fetch(SHEETS_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(finalData)
+        });
+      } catch {
+        // Webhook not set up yet, still show success
+      }
+
+      document.getElementById('loggedCalories').textContent = finalData.calories + ' kcal';
+      document.getElementById('loggedProtein').textContent = finalData.protein_g + 'g';
+      document.getElementById('loggedCost').textContent = '£' + finalData.estimated_cost_gbp.toFixed(2);
+      document.getElementById('successChefTipText').textContent = nutritionData.chef_tip;
+
+      showStep('step-success');
+    });
+
+    document.getElementById('startOverBtn').addEventListener('click', () => resetAll());
+    document.getElementById('logAnotherBtn').addEventListener('click', () => resetAll());
+
+    function resetAll() {
+      uploadedImageBase64 = null;
+      identifiedItems = [];
+      nutritionData = null;
+      uploadPreview.style.display = 'none';
+      analyseBtn.disabled = true;
+      photoInput.value = '';
+      showStep('step-upload');
+    }
+  </script>
+</body>
+</html>

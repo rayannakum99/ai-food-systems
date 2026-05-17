@@ -60,7 +60,7 @@ rayannakum.co.uk/fridge-to-recipe
 How it works
 Recipe text or URL → Claude AI → A to F grade
 
-# Status
+### Status
 * Scoring: working
 * Grading system: working
 * Ingredient cost breakdown: working

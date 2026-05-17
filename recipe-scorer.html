@@ -194,9 +194,35 @@ Fry onion and garlic in oil for 5 minutes..."></textarea>
           </div>
         </div>
       </div>
-      <div class="btn-row">
-        <button class="btn-primary" id="scoreBtn" disabled>Score this recipe</button>
-      </div>
+     <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
+  <div style="font-size: 11px; font-weight: 600; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px;">How grading works</div>
+  <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+    <div style="text-align: center; padding: 10px 6px; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-radius: 8px;">
+      <div style="font-family: Syne, sans-serif; font-size: 20px; font-weight: 800; color: #4ade80;">A</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4;">Cheap, nutritious and easy</div>
+    </div>
+    <div style="text-align: center; padding: 10px 6px; background: rgba(134,239,172,0.06); border: 1px solid rgba(134,239,172,0.15); border-radius: 8px;">
+      <div style="font-family: Syne, sans-serif; font-size: 20px; font-weight: 800; color: #86efac;">B</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4;">Strong on two of three</div>
+    </div>
+    <div style="text-align: center; padding: 10px 6px; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 8px;">
+      <div style="font-family: Syne, sans-serif; font-size: 20px; font-weight: 800; color: #fbbf24;">C</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4;">Average across the board</div>
+    </div>
+    <div style="text-align: center; padding: 10px 6px; background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.2); border-radius: 8px;">
+      <div style="font-family: Syne, sans-serif; font-size: 20px; font-weight: 800; color: #fb923c;">D</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4;">Expensive or poor nutrition</div>
+    </div>
+    <div style="text-align: center; padding: 10px 6px; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); border-radius: 8px;">
+      <div style="font-family: Syne, sans-serif; font-size: 20px; font-weight: 800; color: #f87171;">F</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4;">Fails on most counts</div>
+    </div>
+  </div>
+  <div style="font-size: 12px; color: var(--muted); margin-top: 12px;">Weighted: cost per serving 40% · nutrition per £1 35% · difficulty 25%</div>
+</div>
+<div class="btn-row">
+  <button class="btn-primary" id="scoreBtn" disabled>Score this recipe</button>
+</div>
       <p class="disclaimer"><strong>Note:</strong> Costs are estimated using UK supermarket prices (Tesco, Aldi, Asda) and are accurate ballpark figures, not live prices.</p>
     </div>
 

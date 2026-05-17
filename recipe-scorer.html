@@ -502,10 +502,20 @@ Return ONLY this JSON, nothing else:
       const parser = new DOMParser();
       const doc = parser.parseFromString(data.contents, 'text/html');
       doc.querySelectorAll('script, style, nav, footer, header, aside').forEach(el => el.remove());
-      recipeContent = doc.body.innerText.slice(0, 4000);
+      const text = doc.body.innerText.slice(0, 4000).trim();
+      if (!text || text.length < 100) throw new Error('Blocked');
+      recipeContent = text;
     } catch {
-      alert('Could not fetch that URL. Please paste the recipe text directly instead.');
       showStep('step-input');
+      const existing = document.getElementById('url-error-msg');
+      if (!existing) {
+        const msg = document.createElement('div');
+        msg.id = 'url-error-msg';
+        msg.style.cssText = 'background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 10px; padding: 14px 18px; font-size: 14px; color: #fbbf24; margin-bottom: 16px; line-height: 1.6;';
+        msg.innerHTML = '⚠️ That website blocked the request so the recipe could not be fetched. Try copying the recipe text from the page and pasting it in directly instead.';
+        const inputCard = document.querySelector('.input-card');
+        inputCard.insertAdjacentElement('afterend', msg);
+      }
       return;
     }
   }

@@ -43,11 +43,12 @@ Google Form → Make.com → Anthropic Claude → Gmail
 
 ### Try it
 bit.ly/rayeats-mealplanner
-System 2 - Fridge to Recipe Tool
+
+##System 2 - Fridge to Recipe Tool
 How it works
 Photo upload → Claude Vision → Recipe output
 
-Status
+#Status
 * End to end: working
 * Vision identification: working
 * Recipe generation: working
@@ -55,11 +56,11 @@ Status
 Try it
 rayannakum.co.uk/fridge-to-recipe
 
-System 3 - Recipe Budget Scorer
+##System 3 - Recipe Budget Scorer
 How it works
 Recipe text or URL → Claude AI → A to F grade
 
-Status
+#Status
 * Scoring: working
 * Grading system: working
 * Ingredient cost breakdown: working
@@ -68,9 +69,9 @@ Status
 Try it
 rayannakum.co.uk/recipe-scorer
 
-System 4 - Budget Forecast Model
+##System 4 - Budget Forecast Model
 How it works
 R-based cost per serving model across common meals, budget ranges and supermarkets.
 
-Status
+#Status
 * In progress

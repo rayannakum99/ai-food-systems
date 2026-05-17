@@ -406,21 +406,18 @@ Mix oats, milk and honey in a jar or bowl. Stir well, cover and refrigerate over
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    async function callClaude(userMessage, systemPrompt) {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: userMessage }]
-        })
-      });
-      const data = await res.json();
-      return data.content.map(b => b.text || '').join('');
-    }
-
+   async function callClaude(userMessage, systemPrompt) {
+  const res = await fetch('/api/score', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      recipe: userMessage,
+      system: systemPrompt
+    })
+  });
+  const data = await res.json();
+  return JSON.stringify(data);
+}
     function parseJSON(raw) {
   try {
     const clean = raw.replace(/```json|```/g, '').trim();

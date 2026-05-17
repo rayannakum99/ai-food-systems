@@ -422,14 +422,15 @@ Mix oats, milk and honey in a jar or bowl. Stir well, cover and refrigerate over
     }
 
     function parseJSON(raw) {
-      try {
-        const clean = raw.replace(/```json|```/g, '').trim();
-        return JSON.parse(clean);
-      } catch {
-        return null;
-      }
-    }
-
+  try {
+    const clean = raw.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch (e) {
+    console.log('Raw Claude response:', raw);
+    console.log('Parse error:', e);
+    return null;
+  }
+}
     function animateLoadingSteps() {
       const steps = ['ls1', 'ls2', 'ls3', 'ls4', 'ls5'];
       steps.forEach((id, i) => {

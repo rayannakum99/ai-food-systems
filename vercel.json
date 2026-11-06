@@ -1,3 +1,20 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/fridge-to-recipe",
+      "destination": "https://tools.rayannakum.co.uk/fridge-to-recipe",
+      "permanent": true
+    },
+    {
+      "source": "/fridge-to-recipe/:path*",
+      "destination": "https://tools.rayannakum.co.uk/fridge-to-recipe/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/recipe-scorer",
+      "destination": "https://tools.rayannakum.co.uk/recipe-scorer",
+      "permanent": true
+    }
+  ]
 }
